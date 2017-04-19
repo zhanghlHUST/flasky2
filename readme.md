@@ -5,6 +5,7 @@
 	- [第一个完整程序](#第一个完整程序)
 	- [上下文对象和url_map](#上下文对象和urlmap)
 	- [响应对象 Response 的使用](#响应对象-response-的使用)
+	- [重定向对象 redirect 和 abort 的使用](#重定向对象-redirect-和-abort-的使用)
 
 <!-- /MarkdownTOC -->
 
@@ -94,3 +95,33 @@ if __name__ == '__main__':
 
 >* Chrome 浏览器查看 cookie 点击 url 左侧的感叹号
 >* 添加到本地仓库, `git add .`, `git commit -m "2c, response object"`
+
+#### 重定向对象 redirect 和 abort 的使用
+
+```python
+from flask import Flask
+from flask import redirect
+from flask import abort
+
+app = Flask(__name__)
+
+# 路由的基本用例
+@app.route('/')
+def index():
+	# 重定向响应 redirect(url)
+	return redirect('http://baidu.com')
+
+# 动态路由的基本用例
+@app.route('/user/<name>')
+def user(name):
+	if name !='zhang':
+	# 处理错误的abort 函数的使用
+		abort(404)
+	return '<h1> Hello %s !</h1>' % name
+
+if __name__ == '__main__':
+	app.run(debug=True)
+```
+
+>* 添加到本地仓库, `git add .`, `git commit -m "2d, redirect and abort"`
+
