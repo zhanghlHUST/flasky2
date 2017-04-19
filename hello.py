@@ -1,18 +1,15 @@
 from flask import Flask
-from flask import request
+from flask import make_response
 
 app = Flask(__name__)
 
 # 路由的基本用例
 @app.route('/')
 def index():
-	# return '<h1> Hello World !</h1>'
-	# request 请求上下文的使用
-	# use_agent = request.headers.get('User-Agent')
-	# return '<h1> Your brower is %s !</h1>' % use_agent
-	# url_map 的信息
-	return '<p> url_map is %s !</h1>' % app.url_map
-
+	# 相应 Response 对象的基本使用
+	response = make_response( '<h1> This file carries with a cookie !</h1>' )
+	response.set_cookie('answer','42')
+	return response
 
 # 动态路由的基本用例
 @app.route('/user/<name>')
