@@ -6,6 +6,7 @@
 	- [上下文对象和url_map](#上下文对象和urlmap)
 	- [响应对象 Response 的使用](#响应对象-response-的使用)
 	- [重定向对象 redirect 和 abort 的使用](#重定向对象-redirect-和-abort-的使用)
+	- [flask-script 支持命令行选项](#flask-script-支持命令行选项)
 
 <!-- /MarkdownTOC -->
 
@@ -125,3 +126,27 @@ if __name__ == '__main__':
 
 >* 添加到本地仓库, `git add .`, `git commit -m "2d, redirect and abort"`
 
+#### flask-script 支持命令行选项
+>* 安装 flask-script：`pip install flask-script`
+```python
+from flask import Flask
+from flask_script import Manager
+
+app = Flask(__name__)
+manager = Manager(app)
+
+# 路由的基本用例
+@app.route('/')
+def index():
+	return '<h1> Hello world !</h1>'
+
+# 动态路由的基本用例
+@app.route('/user/<name>')
+def user(name):
+	return '<h1> Hello %s !</h1>' % name
+
+if __name__ == '__main__':
+	manager.run()
+```
+>* 指定服务器地址 `python hello.py runserver --host localhost`
+>* 添加到本地仓库, `git add .`, `git commit -m "2e, flask-script basic"`
