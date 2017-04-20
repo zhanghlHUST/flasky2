@@ -13,6 +13,7 @@
   - [自定义错误处理模块](#自定义错误处理模块)
   - [创建url的辅助函数](#创建url的辅助函数)
   - [静态文件](#静态文件)
+  - [使用 Flask-Moment 本地化日期和时间](#使用-flask-moment-本地化日期和时间)
 
 <!-- /MarkdownTOC -->
 
@@ -289,3 +290,37 @@ def page_not_found(e):
 
 > `git add .` , `git commit -m "use static file create icon "`
 > `git tag 3f`
+
+#### 使用 Flask-Moment 本地化日期和时间
+
+安装 `pip install flask-moment`
+
+```python
+from flask.ext.moment import Moment
+...
+moment = Moment( app)
+
+# 把 current_time 传入模板进行渲染
+
+from datatime import datatime
+@app.route('/')
+def index():
+  return render_template('index.html', current_time=datatime.utcnow()) 
+```
+
+```html
+ <!-- base.html -->
+ {% block scripts %}
+    {{ super() }}    
+    <!-- 引入 moment.js 库 -->
+    {{ moment.include_moment() }}
+{% endblock %}
+<!-- 为了处理时间戳，Flask-Moment 向模板开放了 moment 类 ？？？？？ -->
+
+<!--  index.html  -->
+<p>the local data and time is {{ moment(current_time).format('LLL') }}.</p>
+<p>That was {{ moment(current_time).fromNow(refresh=True) }}.</p>
+```
+
+> `git add .` , `git commit -m "use flask moment "`
+> `git tag 3g`

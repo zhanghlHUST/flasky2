@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico' )}}" type="image/x-icon">
 {% endblock %}
 
+
 {% block title %} Flasky {% endblock %}
 {% block navbar %}
 <!-- 导航栏 -->
@@ -38,3 +39,11 @@
     </div>
 </div>
 {% endblock %}
+
+{% block scripts %}
+    {{ super() }}    
+    <!-- 引入 moment.js 库 -->
+    {{ moment.include_moment() }}
+{% endblock %}
+
+<!-- 为了处理时间戳，Flask-Moment 向模板开放了 moment 类 ？ -->

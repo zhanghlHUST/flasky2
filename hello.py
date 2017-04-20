@@ -1,15 +1,18 @@
 from flask import Flask, render_template
 from flask_script import Manager
 from flask.ext.bootstrap import Bootstrap
+from flask_moment import Moment
+from datetime import datetime
 
 app = Flask(__name__)
 manager = Manager(app)
 bootstrap = Bootstrap(app)
+moment = Moment(app)
 
 # 路由的基本用例
 @app.route('/')
 def index():
-	return render_template( 'index.html' )
+	return render_template( 'index.html', current_time = datetime.utcnow() )
 
 # 动态路由的基本用例
 @app.route('/user/<name>')
