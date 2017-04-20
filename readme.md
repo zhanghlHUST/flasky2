@@ -2,15 +2,17 @@
 <!-- MarkdownTOC -->
 
 - [概念剖析](#概念剖析)
-	- [jinja2初试](#jinja2初试)
-	- [jinjia2 传入复杂变量](#jinjia2-传入复杂变量)
-	- [常用过滤器](#常用过滤器)
-	- [模板中的 block 和继承机制](#模板中的-block-和继承机制)
+  - [jinja2初试](#jinja2初试)
+  - [jinjia2 传入复杂变量](#jinjia2-传入复杂变量)
+  - [常用过滤器](#常用过滤器)
+  - [模板中的 block 和继承机制](#模板中的-block-和继承机制)
 - [使用 Flask-Bootstrap 集成 Twitter Bootstrap](#使用-flask-bootstrap-集成-twitter-bootstrap)
-	- [安装flask-bootstrap](#安装flask-bootstrap)
-	- [初试flask-bootstrap](#初试flask-bootstrap)
-	- [FLask-Boostarp基模板定义的块](#flask-boostarp基模板定义的块)
-	- [自定义错误处理模块](#自定义错误处理模块)
+  - [安装flask-bootstrap](#安装flask-bootstrap)
+  - [初试flask-bootstrap](#初试flask-bootstrap)
+  - [FLask-Boostarp基模板定义的块](#flask-boostarp基模板定义的块)
+  - [自定义错误处理模块](#自定义错误处理模块)
+  - [创建url的辅助函数](#创建url的辅助函数)
+  - [静态文件](#静态文件)
 
 <!-- /MarkdownTOC -->
 
@@ -264,3 +266,26 @@ def page_not_found(e):
 ```
 > `git add .` , `git commit -m "user define error page "`
 > `git tag 3e`
+
+#### 创建url的辅助函数
+`url_for('视图函数名', 动态路由的关键字参数, 额外参数，_external=True)`，`url_for('user', name='John', page2, _external=True ) 返回 http://localhost:5000/user/John?page=2`
+
+#### 静态文件
+>* 大多数 web 程序中还会使用静态文件，如 图片，JavaScript 源码文件 和 CSS 
+>* 静态文件对应 `url_map` 中的 `/static/<filename>`, 存放在 static 文件夹下
+
+在 `base.html` 中加入 ：
+
+```html
+    {% block head%}
+        {{ super() }}
+        <!-- 对于大多数浏览器，包括 chrome firefox -->
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico' )}}" type="image/x-icon">
+        <!-- 对于 I E -->
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico' )}}" type="image/x-icon">
+    {% endblock %}
+```
+创建 `static` 文件夹加入 `favicon.ico` 文件
+
+> `git add .` , `git commit -m "use static file create icon "`
+> `git tag 3f`

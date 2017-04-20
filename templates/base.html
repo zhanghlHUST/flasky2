@@ -1,5 +1,13 @@
 {% extends "bootstrap/base.html" %}
 <!-- 页面标题 -->
+{% block head%}
+    {{ super() }}
+    <!-- 对于大多数浏览器，包括 chrome firefox -->
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico' )}}" type="image/x-icon">
+    <!-- 对于 I E -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico' )}}" type="image/x-icon">
+{% endblock %}
+
 {% block title %} Flasky {% endblock %}
 {% block navbar %}
 <!-- 导航栏 -->
