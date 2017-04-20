@@ -7,6 +7,7 @@
 	- [响应对象 Response 的使用](#响应对象-response-的使用)
 	- [重定向对象 redirect 和 abort 的使用](#重定向对象-redirect-和-abort-的使用)
 	- [flask-script 支持命令行选项](#flask-script-支持命令行选项)
+- [添加标签](#添加标签)
 
 <!-- /MarkdownTOC -->
 
@@ -150,3 +151,15 @@ if __name__ == '__main__':
 ```
 >* 指定服务器地址 `python hello.py runserver --host localhost`
 >* 添加到本地仓库, `git add .`, `git commit -m "2e, flask-script basic"`
+
+### 添加标签
+* 查看提交 `git log --pretty=oneline`
+* 创建标签
+
+```
+git tag 2e 2f942b
+git tag 2d fb9baf
+git tag 2c e107d7
+git tag 2b bb2488
+git tag 2a e53b17
+```
