@@ -4,6 +4,7 @@
 - [概念剖析](#概念剖析)
 	- [jinja2初试](#jinja2初试)
 	- [jinjia2 传入复杂变量](#jinjia2-传入复杂变量)
+	- [常用过滤器](#常用过滤器)
 
 <!-- /MarkdownTOC -->
 
@@ -79,3 +80,18 @@ def hello(name=None):
 {% endfor %}
 </dl>
 ```
+
+#### 常用过滤器
+
+|过滤器名|说明
+|---|---
+|safe|渲染时不转义
+|capitalize|首字母大写
+|lower|转换小写
+|upper|转换大写
+|title|每个单词的首字母大写
+|trim|删除首尾空格
+|striptags|删除所有的HTML标签
+
+> 模板语法 {{ name|capitalize }}
+
