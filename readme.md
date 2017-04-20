@@ -5,6 +5,7 @@
 	- [jinja2初试](#jinja2初试)
 	- [jinjia2 传入复杂变量](#jinjia2-传入复杂变量)
 	- [常用过滤器](#常用过滤器)
+	- [模板中的 block 和继承机制](#模板中的-block-和继承机制)
 
 <!-- /MarkdownTOC -->
 
@@ -95,3 +96,49 @@ def hello(name=None):
 
 > 模板语法 {{ name|capitalize }}
 > `git commit -m "jinja2 filter"`, `git tag 3b` 
+
+#### 模板中的 block 和继承机制
+
+base.html 文件
+
+```html
+<html>
+<head>
+    {% block head %}
+	<title>{% block title %} {% endblock %}</title>
+    {% endblock %}
+    <style>
+      h1{
+      	background: black;
+      	color: white;
+      	text-align: center;
+      	font-size: 200% ;
+      	padding: 20px;
+      	margin: 5px
+      }
+    </style>
+</head>
+<body>
+   {% block body %}
+   {% endblock %}
+</body>
+</html>
+``` 
+
+user.html 文件
+
+```html
+{% extends "base.html" %}
+<!-- title 嵌套在内层，先对title模块进行衍生 -->
+{% block title %} Index {% endblock %}
+
+<!-- super() 调用父文件的定义 -->
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block body %}
+  <h1> Hello {{ name|capitalize }} ! </h1>
+{% endblock %}
+```
+

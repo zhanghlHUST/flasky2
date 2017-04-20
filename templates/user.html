@@ -1,1 +1,11 @@
-<h1> hello, {{name}}!</h1>
+{% extends "base.html" %}
+
+{% block title %} Index {% endblock %}
+
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block body %}
+  <h1> Hello {{ name|capitalize }} ! </h1>
+{% endblock %}
