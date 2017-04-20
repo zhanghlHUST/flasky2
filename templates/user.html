@@ -1,31 +1,9 @@
-{% extends "bootstrap/base.html" %}
-<!-- 页面标题 -->
-{% block title %} Flasky {% endblock %}
-{% block navbar %}
-<!-- 导航栏 -->
-<!-- navbar-inverse 颜色反色即黑色 -->
-<nav class="navbar navbar-inverse" role="navigation">
-    <div class="container-fluid">
-    <!-- 首个导航标签字体稍大 -->
-    <div class="navbar-header">
-        <a class="navbar-brand" href="/">Flasky</a>
-    </div>
-    <!-- 其余导航标签 -->
-    <div>
-        <ul class="nav navbar-nav">
-            <li class="active"><a href="/user/zhanghl">zhanghl</a></li>
-            <li class="active"><a href="/user/zhanglm">zhanglm</a></li>
-        </ul>
-    </div>
-    </div>
-</nav>
-{% endblock %}
+{% extends "base.html" %}
 
-<!-- 正文 -->
-{% block content %}
-<div class="container">
-	<div class="page-header">
-		<h1> Hello, {{name}}</h1>
-	</div>
-</div>
+{% block title %} Flasky - user {% endblock %}
+
+{% block page_content %}
+  <div class="page-header">
+     <h1> Hello {{ name|capitalize }} !</h1>
+  </div>
 {% endblock %}

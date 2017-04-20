@@ -10,6 +10,7 @@
 	- [安装flask-bootstrap](#安装flask-bootstrap)
 	- [初试flask-bootstrap](#初试flask-bootstrap)
 	- [FLask-Boostarp基模板定义的块](#flask-boostarp基模板定义的块)
+	- [自定义错误处理模块](#自定义错误处理模块)
 
 <!-- /MarkdownTOC -->
 
@@ -238,4 +239,28 @@ bootstrap = Bootstrap( app )
         <style type="text/css" src="my-style.css"> </style>
     {% endblock %}
 ```
-> 'git add .' , 'git commit -m "usual blocks in flask-bootstrap"'
+> `git add .` , `git commit -m "usual blocks in flask-bootstrap"`
+
+#### 自定义错误处理模块
+
+```python
+# 处理错误码的路由
+#处理 404 错误
+@app.errorhandler(404)
+def page_not_found(e):
+	return render_template('404.html'), 404
+```
+
+自定义错误页面：
+
+```html
+{% extends "base.html" %}
+{% block title %} Flasky - page not found {% endblock %}
+{% block page_content %}
+  <div class="page-header">
+     <h1> Not Found !</h1>
+  </div>
+{% endblock %}
+```
+> `git add .` , `git commit -m "user define error page "`
+> `git tag 3e`
