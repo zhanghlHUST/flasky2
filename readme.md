@@ -94,4 +94,4 @@ def hello(name=None):
 |striptags|删除所有的HTML标签
 
 > 模板语法 {{ name|capitalize }}
-
+> `git commit -m "jinja2 filter"`, `git tag 3b` 
