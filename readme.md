@@ -6,6 +6,9 @@
 	- [jinjia2 传入复杂变量](#jinjia2-传入复杂变量)
 	- [常用过滤器](#常用过滤器)
 	- [模板中的 block 和继承机制](#模板中的-block-和继承机制)
+- [使用 Flask-Bootstrap 集成 Twitter Bootstrap](#使用-flask-bootstrap-集成-twitter-bootstrap)
+	- [安装flask-bootstrap](#安装flask-bootstrap)
+	- [初试flask-bootstrap](#初试flask-bootstrap)
 
 <!-- /MarkdownTOC -->
 
@@ -141,4 +144,63 @@ user.html 文件
   <h1> Hello {{ name|capitalize }} ! </h1>
 {% endblock %}
 ```
+> `git add. `, `git commit -m "Jinja2 block and inhert"`  
+> `git tag 3b`
 
+### 使用 Flask-Bootstrap 集成 Twitter Bootstrap
+[Bootstrap中文教程](http://www.runoob.com/bootstrap/bootstrap-glyphicons.html)
+
+> Bootstrap 是一个用于快速开发 Web 应用程序和网站的前端框架。Bootstrap 是基于 HTML、CSS、JAVASCRIPT 的。
+
+#### 安装flask-bootstrap
+
+`pip install flask-bootstrap`
+
+> 初始化 Flask-Bootstrap之后，就可以在程序中使用一个包含所有Bootstrap文件的基模板，这个模板采用Jinja2的模板继承机制，让程序扩展一个具有基本页面结构的基模板
+> [Bootstrap入门教程](http://www.cnblogs.com/ventlam/archive/2012/05/28/2520703.html)
+
+```python
+from flask.ext.bootstrap import Bootstrap
+# ...
+bootstrap = Bootstrap( app )
+```
+采用Bootstrap的 `user.html`
+
+#### 初试flask-bootstrap
+
+```html
+{% extends "bootstrap/base.html" %}
+<!-- 页面标题 -->
+{% block title %} Flasky {% endblock %}
+{% block navbar %}
+<!-- 导航栏 -->
+<!-- navbar-inverse 颜色反色即黑色 -->
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+    <!-- 首个导航标签字体稍大 -->
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/">Flasky</a>
+    </div>
+    <!-- 其余导航标签 -->
+    <div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="/user/zhanghl">zhanghl</a></li>
+            <li class="active"><a href="/user/zhanglm">zhanglm</a></li>
+        </ul>
+    </div>
+    </div>
+</nav>
+{% endblock %}
+
+<!-- 正文 -->
+{% block content %}
+<div class="container">
+	<div class="page-header">
+		<h1> Hello, {{name}}</h1>
+	</div>
+</div>
+{% endblock %}
+``` 
+
+> `git add. `, `git commit -m "Jinja2 bootstrap first demo"`  
+> `git tag 3c`
