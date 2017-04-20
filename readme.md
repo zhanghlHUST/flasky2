@@ -1,136 +1,24 @@
-# flask读书笔记_chpter2
+# flask读书笔记_chpter3
 <!-- MarkdownTOC -->
 
-- [环境设置](#环境设置)
-	- [第一个完整程序](#第一个完整程序)
-	- [上下文对象和url_map](#上下文对象和urlmap)
-	- [响应对象 Response 的使用](#响应对象-response-的使用)
-	- [重定向对象 redirect 和 abort 的使用](#重定向对象-redirect-和-abort-的使用)
-	- [flask-script 支持命令行选项](#flask-script-支持命令行选项)
-- [添加标签](#添加标签)
+- [概念剖析](#概念剖析)
+	- [jinja2初试](#jinja2初试)
 
 <!-- /MarkdownTOC -->
 
-> 本书没有细致的讲解设计的逻辑与规则，所以本书的学习重点在于熟悉 flask 处理的基本方式，决定跟着书中的程序敲一遍
+### 概念剖析
+>* (Control View Model) 表现层、业务层与模型层分离机制，而模板用来管理表现层。
+>* 模板是一个包含相应文本的文件，其中的动态部分用占位量表示，占位量的具体值只有在请求上下文中才知道。使用真实值替换相应字符。
 
-### 环境设置
->* 工作目录：`E:\study\evernote\material\flasky2`
->* 创建本地仓库：`git init`
->* 添加 git忽略规则 `.gitignore` 
->* 添加笔记文件 `readme.md`
->* 创建虚拟环境：`virtualenv venv`,`>venv\scripts\activate`, 向 `.gitignore` 添加 `venv` 
->* 安装 flask：`pip install flask` , 向 `.gitignore` 添加 python 的忽略项 `*.py[cod] *.so *.egg *.egg-info dist build`
+#### jinja2初试
 
-#### 第一个完整程序
-
-```python
-from flask import Flask
-app = Flask(__name__)
-
-@app.route('/')
-def index():
-	return '<h1> Hello World !</h1>'
-# 路由的基本使用
-@app.route('/user/<name>')
-def user(name):
-	return '<h1> Hello %s !</h1>' % name
-# 动态路由的基本实现
-if __name__ == '__main__':
-	app.run(debug=True)
-``` 
-
->* 添加到本地仓库, `git add .`, `git commit -m "2a, basic use of route"`
-
-#### 上下文对象和url_map
-``` python
-from flask import Flask
-from flask import request
-
-app = Flask(__name__)
-
-# 路由的基本用例
-@app.route('/')
-def index():
-	# return '<h1> Hello World !</h1>'
-	# request 请求上下文的使用
-	# use_agent = request.headers.get('User-Agent')
-	# return '<h1> Your brower is %s !</h1>' % use_agent
-	# url_map 的信息
-	return '<p> url_map is %s !</h1>' % app.url_map
-
-
-# 动态路由的基本用例
-@app.route('/user/<name>')
-def user(name):
-	return '<h1> Hello %s !</h1>' % name
-
-if __name__ == '__main__':
-	app.run(debug=True)
-```
-
->* 添加到本地仓库, `git add .`, `git commit -m "2b, request and url_map"`
-
-#### 响应对象 Response 的使用
-
-``` python
-from flask import Flask
-from flask import make_response
-
-app = Flask(__name__)
-
-# 路由的基本用例
-@app.route('/')
-def index():
-	# 相应 Response 对象的基本使用
-	response = make_response( '<h1> This file carries with a cookie !</h1>' )
-	response.set_cookie('answer','42')
-	return response
-
-# 动态路由的基本用例
-@app.route('/user/<name>')
-def user(name):
-	return '<h1> Hello %s !</h1>' % name
-
-if __name__ == '__main__':
-	app.run(debug=True)
-```
-
->* Chrome 浏览器查看 cookie 点击 url 左侧的感叹号
->* 添加到本地仓库, `git add .`, `git commit -m "2c, response object"`
-
-#### 重定向对象 redirect 和 abort 的使用
+* 创建模板文件夹`templates`,创建模板文件`index.html`,`user.html`
+* `index.html` 输入 `<h1> hello world!</h1>`
+* `index.html` 输入 `<h1> hello {{ name }}!</h1>`
+* `hello.py` 文件
 
 ```python
-from flask import Flask
-from flask import redirect
-from flask import abort
-
-app = Flask(__name__)
-
-# 路由的基本用例
-@app.route('/')
-def index():
-	# 重定向响应 redirect(url)
-	return redirect('http://baidu.com')
-
-# 动态路由的基本用例
-@app.route('/user/<name>')
-def user(name):
-	if name !='zhang':
-	# 处理错误的abort 函数的使用
-		abort(404)
-	return '<h1> Hello %s !</h1>' % name
-
-if __name__ == '__main__':
-	app.run(debug=True)
-```
-
->* 添加到本地仓库, `git add .`, `git commit -m "2d, redirect and abort"`
-
-#### flask-script 支持命令行选项
->* 安装 flask-script：`pip install flask-script`
-```python
-from flask import Flask
+from flask import Flask, render_template
 from flask_script import Manager
 
 app = Flask(__name__)
@@ -139,27 +27,17 @@ manager = Manager(app)
 # 路由的基本用例
 @app.route('/')
 def index():
-	return '<h1> Hello world !</h1>'
+	return render_template( 'index.html' )
 
 # 动态路由的基本用例
 @app.route('/user/<name>')
 def user(name):
-	return '<h1> Hello %s !</h1>' % name
+	## 使用 jinja2 模板引擎，传入键值对，关键字参数
+	return render_template('user.html', name=name)
 
 if __name__ == '__main__':
 	manager.run()
 ```
->* 指定服务器地址 `python hello.py runserver --host localhost`
->* 添加到本地仓库, `git add .`, `git commit -m "2e, flask-script basic"`
+* 提交到仓库`git add hello.py, readme.md templates`,`git commit -m "jinja2 first demo"`
+* 创建标签 `git tag 3a`
 
-### 添加标签
-* 查看提交 `git log --pretty=oneline`
-* 创建标签
-
-```
-git tag 2e 2f942b
-git tag 2d fb9baf
-git tag 2c e107d7
-git tag 2b bb2488
-git tag 2a e53b17
-```
