@@ -3,11 +3,12 @@
 
 - [概念剖析](#概念剖析)
 	- [jinja2初试](#jinja2初试)
+	- [jinjia2 传入复杂变量](#jinjia2-传入复杂变量)
 
 <!-- /MarkdownTOC -->
 
 ### 概念剖析
->* (Control View Model) 表现层、业务层与模型层分离机制，而模板用来管理表现层。
+>* (Model View Control) 表现层、业务层与模型层分离机制，而模板用来管理表现层。
 >* 模板是一个包含相应文本的文件，其中的动态部分用占位量表示，占位量的具体值只有在请求上下文中才知道。使用真实值替换相应字符。
 
 #### jinja2初试
@@ -41,3 +42,40 @@ if __name__ == '__main__':
 * 提交到仓库`git add hello.py, readme.md templates`,`git commit -m "jinja2 first demo"`
 * 创建标签 `git tag 3a`
 
+#### jinjia2 传入复杂变量
+
+[Flask中Jinja2模板引擎详解(一)–控制语句和表达式](http://www.bjhee.com/jinja2-statement.html)
+
+```python
+@app.route('/hello/<name>')
+def hello(name=None):
+    if name == 'world':
+        name = '<em>World</em>'
+    return render_template('hello-1.html', name=name, digits=[1,2,3,4,5],
+                           users=[{'name':'John'},
+                                  {'name':'Tom', 'hidden':True},
+                                  {'name':'Lisa'},
+                                  {'name':'Bob'}])
+```
+
+模板示例：
+```html
+<dl>
+{% for user in users if not user.hidden %}
+  {% if loop.first %}
+    <div>User List:</div>
+    <dd>Deep: {{ loop.depth }}</dd>
+    {% continue %}
+  {% endif %}
+  <div class="{{ loop.cycle('odd', 'even') }}">
+  <dt>User No {{ loop.index }}:</dt>
+  <dd>{{ user.name }}</dd>
+  </div>
+  {% if loop.last %}
+    <div>Total Users: {{ loop.length }}</div>
+  {% endif %}
+{% else %}
+  <li>No users found</li>
+{% endfor %}
+</dl>
+```

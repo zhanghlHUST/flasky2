@@ -1,0 +1,81 @@
+<!doctype html>
+<title>Hello Sample</title>
+<style type="text/css">
+    .odd {
+        background-color: #BDF;
+    }
+</style>
+
+{# This is comment #}
+{% if name and name == 'admin'  %}
+  <h1>This is admin console</h1>
+{% elif name %}
+  {% autoescape false %}
+  <h1>Welcome {{ name }}!</h1>
+  {% endautoescape %}
+  <p>String Connect: {{ "Hello " ~ name ~ "!" }}</p>
+{% else %}
+  <h1>Please login</h1>
+  <p>String: {{ "Hello" }}</p>
+  <p>Dict: {{ {'id':'1', 'name':'hello'} }}</p>
+  <p>Calculate: {{ 1+2 }}</p>
+  <p>Compare: {{ 2 > 1 }}</p>
+  <p>Logic: {{ False and True }}</p>
+  <p>in: {{ 1 in [1,2,3] }}</p>
+{% endif %}
+  <p>If keyword: {{ 'Hi, %s' % name if name }}</p>
+
+  {% for digit in digits -%}
+    {{ digit }}
+  {%- endfor %}
+
+<dl>
+{% for user in users if not user.hidden %}
+  {% if loop.first %}
+    <div>User List:</div>
+    <dd>Deep: {{ loop.depth }}</dd>
+    {% continue %}
+  {% endif %}
+  <div class="{{ loop.cycle('odd', 'even') }}">
+  <dt>User No {{ loop.index }}:</dt>
+  <dd>{{ user.name }}</dd>
+  </div>
+  {% if loop.last %}
+    <div>Total Users: {{ loop.length }}</div>
+  {% endif %}
+{% else %}
+  <li>No users found</li>
+{% endfor %}
+</dl>
+
+{% set items = [[1,2],[3,4,5]] %}
+{% for item in [[1,2],[3,4,5]] recursive %}
+  Depth: {{ loop.depth }}
+  {% if item[0] %}
+    {{ loop(item) }}
+  {% else %}
+    Number: {{ item }} ;
+  {% endif %}
+{% endfor %}
+
+{% raw %}
+    <ul>
+    {% for item in items %}
+        <li>{{ item }}</li>
+    {% endfor %}
+    </ul>
+{% endraw %}
+
+{% with foo = 1 %}
+    {% set bar = 2 %}
+    {{ foo + bar }}
+{% endwith %}
+{# foo and bar are not visible here #}
+
+{% with arr = ['Sunny'] %}
+  {% do arr.append('Rainy') %}
+  <p><em>{{ arr }}</em></p>
+{% endwith %}
+
+
+
