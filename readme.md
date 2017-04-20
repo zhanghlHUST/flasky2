@@ -9,6 +9,7 @@
 - [使用 Flask-Bootstrap 集成 Twitter Bootstrap](#使用-flask-bootstrap-集成-twitter-bootstrap)
 	- [安装flask-bootstrap](#安装flask-bootstrap)
 	- [初试flask-bootstrap](#初试flask-bootstrap)
+	- [FLask-Boostarp基模板定义的块](#flask-boostarp基模板定义的块)
 
 <!-- /MarkdownTOC -->
 
@@ -204,3 +205,37 @@ bootstrap = Bootstrap( app )
 
 > `git add. `, `git commit -m "Jinja2 bootstrap first demo"`  
 > `git tag 3d`
+
+#### FLask-Boostarp基模板定义的块
+
+|block名|说明
+|---|---
+|doc| 整个 html 文档
+|html_attribs|`<html>` 标签属性
+|html|`<html>` 标签中的内容
+|head|`<head>` 标签中的内容
+|title|`<title>` 标签中的内容
+|metas|一组 `<meta>` 标签 
+|styles|层叠样式表定义
+|body_attribs|`<body>`标签的属性
+|body|`<body>` 标签的内容
+|navbar|用户定义的导航条
+|`<content>`|用户定义的页面内用
+|scripts|文档底部的 JavaScripts 声明
+
+示例：
+
+```html
+    <!-- scripts 块示例 -->
+    {% block scripts %}
+         {{ super() }}
+        <script type="text/javascript" src="my-script.js"></script>>
+    {% endblock %}
+    
+    <!-- styles 块示例 -->
+    {% block styles %}
+        {{ super() }}
+        <style type="text/css" src="my-style.css"> </style>
+    {% endblock %}
+```
+> 'git add .' , 'git commit -m "usual blocks in flask-bootstrap"'
