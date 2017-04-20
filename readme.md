@@ -145,7 +145,7 @@ user.html 文件
 {% endblock %}
 ```
 > `git add. `, `git commit -m "Jinja2 block and inhert"`  
-> `git tag 3b`
+> `git tag 3c`
 
 ### 使用 Flask-Bootstrap 集成 Twitter Bootstrap
 [Bootstrap中文教程](http://www.runoob.com/bootstrap/bootstrap-glyphicons.html)
@@ -200,7 +200,7 @@ bootstrap = Bootstrap( app )
 	</div>
 </div>
 {% endblock %}
-``` 
+```
 
 > `git add. `, `git commit -m "Jinja2 bootstrap first demo"`  
-> `git tag 3c`
+> `git tag 3d`
