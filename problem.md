@@ -26,6 +26,22 @@
 >* render_template("template.html",var=val) 关键字参数的方式传入   
 >* Page 31, flask - Moment 部分 `为了处理时间戳，Flask-Moment 向模板开放了 moment 类 `， 以什么样的机制？  
 >    猜想是通过 `hello.py` 中的 `moment = Moment(app) ` 语句，并且 `manager`和`bootstrap`都是通过这种机制  
+
+### Flask_wtf 中表单相关问题
+#### `get`与`post`的区别
+#### 表单数据怎样提交到程序？
+#### 执行方式
+```python
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    name=None
+	在 post 和 get 时创建的对象有何区别？
+    form = NameForm()
+    if form.validate_on_submit():
+      name = form.name.data
+      form.name.data = ''
+    return render_template( 'index.html', form=form, name=name )
+```
 ## 资源汇总
 
 [思诚之道](http://www.bjhee.com/jinja2-context.html)
