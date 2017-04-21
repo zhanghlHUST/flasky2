@@ -31,12 +31,16 @@
 #### `get`与`post`的区别
 #### 表单数据怎样提交到程序？
 #### 执行方式
+[flask-wtf速成教程](http://flask123.sinaapp.com/article/60/)
+
 ```python
 @app.route('/', methods=['GET', 'POST'])
 def index():
     name=None
 	在 post 和 get 时创建的对象有何区别？
     form = NameForm()
+	创建时，自动传入 request 作为参数吗？
+	那么，当一个页面有多个表格怎么区分？
     if form.validate_on_submit():
       name = form.name.data
       form.name.data = ''
