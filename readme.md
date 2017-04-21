@@ -60,3 +60,28 @@ def index():
 {% endblock %}
 ```
 >* `git add. `, `git commit -m "flask-wtf first demo "`, `git tag 4a`
+
+#### 重定向和用户会话
+
+> 页面刷新时，浏览器会自动的发送之前已经发送给过的 `post` 请求，会弹出警告页面  
+> **Post / 重定向 / Get模式** [Web开发设计模式PRG：Post/Redirect/Get，防止重复提交表单](https://my.oschina.net/imot/blog/143120) 通俗来说，PRG就是用户提交 post 请求，服务器返回 get 的重定向，客户端请求 get 请求，当刷新时，浏览器提交 get 请求。此时需要采用 会话对象 保存表单数据。
+
+`hello.py` 文件：
+
+```python
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    name=None
+    form = NameForm()
+    if form.validate_on_submit():
+        # 使用 session 保存数据
+        session['name'] = form.name.data
+        return redirect( url_for('index'))
+    return render_template( 'index.html', form=form, name=session.get('name') )
+OUTPUT:
+127.0.0.1 - - [21/Apr/2017 21:31:51] "GET / HTTP/1.1" 200 -                    # 启动浏览器，get index.html
+127.0.0.1 - - [21/Apr/2017 21:31:52] "GET /static/favicon.ico HTTP/1.1" 200 -  # 加载图标文件
+127.0.0.1 - - [21/Apr/2017 21:32:02] "POST / HTTP/1.1" 302 -                   # 表单的 post 请求
+127.0.0.1 - - [21/Apr/2017 21:32:02] "GET / HTTP/1.1" 200 -                    # 重定向 get 请求
+```
+
