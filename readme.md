@@ -84,4 +84,40 @@ OUTPUT:
 127.0.0.1 - - [21/Apr/2017 21:32:02] "POST / HTTP/1.1" 302 -                   # 表单的 post 请求
 127.0.0.1 - - [21/Apr/2017 21:32:02] "GET / HTTP/1.1" 200 -                    # 重定向 get 请求
 ```
+>* `git add. `, `git commit -m "post_redirect_get and session "`
 
+#### flash推送状态变化消息
+
+hello.py 修改
+
+``` python
+from flask import Flask, render_template, session, url_for, redirect, flash
+...
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    name=None
+    form = NameForm()
+    if form.validate_on_submit():
+        old_name = session['name']
+        if old_name is not None and old_name != form.name.data:
+            # flash 推送状态信息
+            flash('Looks like you have changed your name!')
+        # 使用 session 保存数据
+        session['name'] = form.name.data
+        return redirect( url_for('index'))
+    return render_template( 'index.html', form=form, name=session.get('name') )
+```
+
+`base.html` 添加渲染
+
+```html
+<div class="container">
+
+<!-- 渲染 flash 信息 --> 
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning">
+    <button type = "button" class="close" data-dismiss="alert">&times;</button>
+    {{ message }}
+</div>
+```
+>* `git add. `, `git commit -m "flash alert "` ,`git tag 4b`
