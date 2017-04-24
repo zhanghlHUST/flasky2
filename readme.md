@@ -11,6 +11,7 @@
     - [创建模型之间的关系](#创建模型之间的关系)
     - [数据库操作](#数据库操作)
     - [数据库的查询`query`对象](#数据库的查询query对象)
+    - [视图函数中调用数据库](#视图函数中调用数据库)
 - [附录](#附录)
   - [常用的SQLAlchemy 的列类型](#常用的sqlalchemy-的列类型)
   - [常用的 SQLAlchemy 的列选项](#常用的-sqlalchemy-的列选项)
@@ -198,6 +199,31 @@ cmd 中 shell 方式执行查找：
 ```
 
 `git add. git commit -m "sqlalchemy first demo"`
+
+##### 视图函数中调用数据库
+
+`hello.py`文件
+
+```python
+# 路由 index
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    form = NameForm()
+    if form.validate_on_submit():
+        # 查找用户信息
+        user = User.query.filter_by( username=form.name.data ).first()
+        # 记录新用户
+        if user is None:
+            user = User( username = form.name.data)
+            # add 到 session
+            db.session.add(user)
+            session['known'] = False
+        else:
+            session['known'] = True
+        session['name'] = form.name.data
+        return redirect( url_for('index'))
+    return render_template('index.html', form=form, name=session.get('name'), known=session.get('known', False))
+```
 
 
 ### 附录
