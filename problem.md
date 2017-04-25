@@ -68,6 +68,8 @@ def index():
 ### 数据库修改框架`migrate`的使用
 [Flask 数据库迁移与部署的一些经验](http://www.jianshu.com/p/032723bb9b05)
 
+### python 发邮件联系
+[python邮件总结](https://my.oschina.net/jhao104/blog/613774)
 
 ## 资源汇总
 

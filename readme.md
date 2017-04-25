@@ -64,4 +64,6 @@ def mail_test():
 > `git add. git commit -m "flask mail demo"`,`git tag 6a`
 
 ### 附录
-
+#### cmd环境变量的设置
+[cmd命令集-SET(显示、设置或删除 cmd.exe 环境变量](http://blog.itpub.net/637736/viewspace-310181)  
+[python环境变量操作](http://aurorawu.lofter.com/post/18f005_6fd653)
