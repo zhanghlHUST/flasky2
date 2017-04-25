@@ -19,7 +19,7 @@
   - [常用的 SQLAlchemy 的列选项](#常用的-sqlalchemy-的列选项)
   - [常用的 SQLAlchemy 的关系选项](#常用的-sqlalchemy-的关系选项)
   - [常用的 SQLAlchemy 查询过滤器](#常用的-sqlalchemy-查询过滤器)
-    - [常用的 query 对象的操作](#常用的-query-对象的操作)
+  - [常用的 query 对象的操作](#常用的-query-对象的操作)
 
 <!-- /MarkdownTOC -->
 
@@ -351,7 +351,7 @@ def downgrade():
 |`oredr_by()`| 采用指定条件对原查询的结果排序，返回新查询
 |`group_by`|采用指定条件对原查询结果进行分组，返回新查询    
 
-##### 常用的 query 对象的操作
+#### 常用的 query 对象的操作
 
 |操作|说明
 |---|---
