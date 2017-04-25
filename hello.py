@@ -7,9 +7,8 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import Required
 from flask_sqlalchemy import SQLAlchemy
 import os
-
-# 获取当前路径
-basedir = os.path.abspath( os.path.dirname(__file__))
+from flask_script import Shell
+from flask_migrate import Migrate, MigrateCommand
 
 # 设置 flask 对象 manager, bootstrap, 及 moment 对象
 app = Flask(__name__)
@@ -17,14 +16,30 @@ manager = Manager(app)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 
+
+# 获取当前路径
+basedir = os.path.abspath( os.path.dirname(__file__))
+
 ## 设置 SQLite 数据库 URI
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir,'data.sqlite')
 ## SQLALCHEMY_COMMIT_ON_TEARDOWN
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 ## 获取数据库对象
 db = SQLAlchemy(app)
-## 定义模型
 
+# 创建 shell 的上下文环境
+def make_shell_context():
+    return dict(app=app, db=db, User=User, Role=Role)
+# 配置 manager 的命令行
+manager.add_command("shell", Shell(make_context = make_shell_context))
+
+# 创建数据库迁移对象
+Migrate(app, db)
+# 配置 flask_script 命令
+manager.add_command('db', MigrateCommand)
+
+
+## 定义模型
 # 定 Role 模型
 class Role(db.Model):
 
@@ -42,7 +57,7 @@ class Role(db.Model):
     # 将返回与角色相关联的用户的列表，第一个参数 用字符串表示关系另一端的模型
     # backref='role' 向User类添加了 role 属性, role_id 返回的是外键的值，
     # role返回的是模型Role的对象
-    users = db.relationship('User', backref='role')
+    users = db.relationship('User', backref='role', lazy='dynamic')
 
     # 返回表示模型的字符串，供调试和测试使用
     def __repr__(self):
@@ -119,21 +134,6 @@ def index():
         return redirect( url_for('index'))
     return render_template('index.html', form=form, name=session.get('name'), known=session.get('known', False))
 
-
-
-    name=None
-    form = NameForm()
-    if form.validate_on_submit():
-        old_name = session['name']
-        if old_name is not None and old_name != form.name.data:
-            # flash 推送状态信息
-            flash('Looks like you have changed your name!')
-        # 使用 session 保存数据
-        session['name'] = form.name.data
-        return redirect( url_for('index'))
-    return render_template( 'index.html', form=form, name=session.get('name') )
-
-
 # 动态路由 /user/<name>
 @app.route('/user/<name>')
 def user(name):
@@ -150,5 +150,5 @@ def internal_server_error(e):
 	return render_template('500.html'), 500
 
 if __name__ == '__main__':
-	# manager.run()
-    app.run(host='127.0.0.1',port=5000,debug=True)
+	manager.run()
+    # app.run(host='127.0.0.1',port=5000,debug=True)

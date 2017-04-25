@@ -10,6 +10,9 @@
 			- [表单数据怎样提交到程序？](#表单数据怎样提交到程序？)
 			- [执行方式](#执行方式)
 		- [`Flask-SQKAlchemy`在执行`create_all\(\)` 自动创建对应的表，如何识别所有需要建表的对象](#flask-sqkalchemy在执行createall-自动创建对应的表，如何识别所有需要建表的对象)
+		- [shell 与 manage 的执行方式有何区别](#shell-与-manage-的执行方式有何区别)
+		- [shell 执行方式的目的是？](#shell-执行方式的目的是？)
+		- [数据库修改框架`migrate`的使用](#数据库修改框架migrate的使用)
 	- [资源汇总](#资源汇总)
 
 <!-- /MarkdownTOC -->
@@ -53,6 +56,18 @@ def index():
 ```
 
 ### `Flask-SQKAlchemy`在执行`create_all()` 自动创建对应的表，如何识别所有需要建表的对象
+
+### shell 与 manage 的执行方式有何区别
+
+[网站后端.Flask.五脏俱全的flask-script扩展](http://www.th7.cn/Program/Python/201606/886039.shtml)
+> runserver  1.runserver,主要运行Flask内置的Web服务器,可通过python manager.py runserver -h设置内置web开发服务器的命令行参数> 
+> shell  1.shell,主要用于基于上下文在ipython(如果安装ipython,可通过Shell(use_ipython=False)或--no-ipython禁用)/python shell中调试程序实例中的对象
+
+### shell 执行方式的目的是？
+
+### 数据库修改框架`migrate`的使用
+[Flask 数据库迁移与部署的一些经验](http://www.jianshu.com/p/032723bb9b05)
+
 
 ## 资源汇总
 
