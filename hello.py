@@ -9,6 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from flask_script import Shell
 from flask_migrate import Migrate, MigrateCommand
+from flask_mail import Mail, Message
 
 # 设置 flask 对象 manager, bootstrap, 及 moment 对象
 app = Flask(__name__)
@@ -24,6 +25,13 @@ basedir = os.path.abspath( os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir,'data.sqlite')
 ## SQLALCHEMY_COMMIT_ON_TEARDOWN
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+
+# 设置邮件
+app.config['MAIL_SERVER'] = 'smtp.126.com'
+app.config['MAIL_PORT'] = 25
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_126_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_126_PASSWORD')
+
 ## 获取数据库对象
 db = SQLAlchemy(app)
 
@@ -38,6 +46,8 @@ Migrate(app, db)
 # 配置 flask_script 命令
 manager.add_command('db', MigrateCommand)
 
+# 导入邮件
+mail = Mail(app)
 
 ## 定义模型
 # 定 Role 模型
@@ -112,6 +122,7 @@ class NameForm(FlaskForm):
     name = StringField("What's your name", validators=[Required()] )
     submit = SubmitField('Submit')
 
+
 # 设置密钥s
 app.config['SECRET_KEY'] = "hard to guess string"
 
@@ -138,6 +149,15 @@ def index():
 @app.route('/user/<name>')
 def user(name):
 	return render_template('user.html', name=name)
+
+# 路由 /mail>
+@app.route('/mail')
+def mail_test():
+    msg = Message('test subject', sender='zhanghl_DE@126.com', recipients=['zhanghl@hust.edu.cn'])
+    msg.body = 'test body'
+    msg.html = '<b>HTML</b> body'
+    mail.send(msg)
+    return '<h1> hava send the message </h1>'
 
 #处理 404 错误
 @app.errorhandler(404)
