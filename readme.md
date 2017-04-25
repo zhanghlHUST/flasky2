@@ -3,17 +3,20 @@
 <!-- MarkdownTOC -->
 
 - [概念剖析-flask电子邮件操作](#概念剖析-flask电子邮件操作)
-  - [python 的数据库支持](#python-的数据库支持)
+  - [python 的邮件支持](#python-的邮件支持)
   - [`Flask-Mail` 的电子邮件支持](#flask-mail-的电子邮件支持)
-- [附录](#附录)
   - [Flask-Mail SMTP服务器的配置](#flask-mail-smtp服务器的配置)
+  - [126邮箱的配置](#126邮箱的配置)
+  - [模板渲染邮件](#模板渲染邮件)
+- [附录](#附录)
+  - [cmd环境变量的设置](#cmd环境变量的设置)
 
 <!-- /MarkdownTOC -->
 
 
 ### 概念剖析-flask电子邮件操作
 
-#### python 的数据库支持
+#### python 的邮件支持
 
 >* python 标准库中的 `smtplib` 包可以用于发送电子邮件
 >* `Flask-Mail` 扩展包装了 `smtplib`
@@ -62,6 +65,67 @@ def mail_test():
     return '<h1> hava send the message </h1>'
 ```
 > `git add. git commit -m "flask mail demo"`,`git tag 6a`
+
+#### 模板渲染邮件
+
+`hello.py` 文件中
+
+```python
+
+from flask_mail import Mail, Message
+...
+# 设置邮件
+app.config['MAIL_SERVER'] = 'smtp.126.com'
+app.config['MAIL_PORT'] = 25
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_126_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_126_PASSWORD')
+# 设置管理员邮箱
+app.config['FLASK_ADMIN'] = os.environ.get('FLASK_ADMIN')
+# 设置 邮件主题前缀
+app.config['FLASK_MAIL_SUBJECT_PREFIX'] = '[Flask]'
+# 设置 发件人名称，此处126邮箱要求发件人名称与账户名一致，此处设置无效
+app.config['FLASK_MAIL_SENDER'] = 'Flasky Admin <flasky@example.com>'
+# 导入邮件
+mail = Mail(app)
+...
+# 发件函数
+def send_mail( to, subject, template, **kwargs):
+    msg = Message( app.config['FLASK_MAIL_SUBJECT_PREFIX'] + subject, sender = app.config['MAIL_USERNAME'], recipients=[to] )
+    # jinja2 同样能够渲染 txt 文件
+    msg.body = render_template( template + '.txt', **kwargs )
+    # jinja2 渲染 html 文件
+    msg.html = render_template( template + '.html', **kwargs )
+    mail.send(msg)
+...
+# 路由 index
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    form = NameForm()
+    if form.validate_on_submit():
+        # 查找用户信息
+        user = User.query.filter_by( username=form.name.data ).first()
+        # 记录新用户
+        if user is None:
+            user = User( username = form.name.data)
+            # add 到 session
+            db.session.add(user)
+            session['known'] = False
+            # 发现新用户，邮件通知管理员
+            if app.config['FLASK_ADMIN']:
+                send_mail(app.config['FLASK_ADMIN'], 'New User', 'mail/new_user', user=user )
+        else:
+            session['known'] = True
+        session['name'] = form.name.data
+        return redirect( url_for('index'))
+    return render_template('index.html', form=form, name=session.get('name'), known=session.get('known', False))
+```
+
+> 设置管理员邮箱环境变量，`set FLASK_ADMIN=xxx@xx.com`
+
+模板文件：`'$templates/mail/new_user.txt`'：`User {{ user.username }} has joined.`
+模板文件：`'$templates/mail/new_user.html`'：`User <b>{{ user.username }}</b> has joined.`
+
+> `git add. git commit -m "flask mail with template"`,`git tag 6b`
 
 ### 附录
 #### cmd环境变量的设置

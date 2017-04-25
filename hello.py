@@ -31,7 +31,19 @@ app.config['MAIL_SERVER'] = 'smtp.126.com'
 app.config['MAIL_PORT'] = 25
 app.config['MAIL_USERNAME'] = os.environ.get('MAIL_126_USERNAME')
 app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_126_PASSWORD')
+app.config['FLASK_ADMIN'] = os.environ.get('FLASK_ADMIN')
+app.config['FLASK_MAIL_SUBJECT_PREFIX'] = '[Flask]'
+app.config['FLASK_MAIL_SENDER'] = 'Flasky Admin <flasky@example.com>'
+# 导入邮件
+mail = Mail(app)
 
+def send_mail( to, subject, template, **kwargs):
+    msg = Message( app.config['FLASK_MAIL_SUBJECT_PREFIX'] + subject, sender = app.config['MAIL_USERNAME'], recipients=[to] )
+    msg.body = render_template( template + '.txt', **kwargs )
+    msg.html = render_template( template + '.html', **kwargs )
+    mail.send(msg)
+
+    pass
 ## 获取数据库对象
 db = SQLAlchemy(app)
 
@@ -46,8 +58,6 @@ Migrate(app, db)
 # 配置 flask_script 命令
 manager.add_command('db', MigrateCommand)
 
-# 导入邮件
-mail = Mail(app)
 
 ## 定义模型
 # 定 Role 模型
@@ -139,6 +149,8 @@ def index():
             # add 到 session
             db.session.add(user)
             session['known'] = False
+            if app.config['FLASK_ADMIN']:
+                send_mail(app.config['FLASK_ADMIN'], 'New User', 'mail/new_user', user=user )
         else:
             session['known'] = True
         session['name'] = form.name.data
