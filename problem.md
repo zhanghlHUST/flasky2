@@ -3,6 +3,8 @@
 - [问题及资源汇总](#问题及资源汇总)
 	- [问题汇总](#问题汇总)
 		- [Flask中模板的执行机制](#flask中模板的执行机制)
+			- [Flask 上下文的概念](#flask-上下文的概念)
+			- [FLask 扩展对象](#flask-扩展对象)
 			- [block块的多次设置（层叠）执行机制](#block块的多次设置（层叠）执行机制)
 		- [JinJa2中变量的传入机制是什么？](#jinja2中变量的传入机制是什么？)
 		- [Flask_wtf 中表单相关问题](#flaskwtf-中表单相关问题)
@@ -13,6 +15,11 @@
 		- [shell 与 manage 的执行方式有何区别](#shell-与-manage-的执行方式有何区别)
 		- [shell 执行方式的目的是？](#shell-执行方式的目的是？)
 		- [数据库修改框架`migrate`的使用](#数据库修改框架migrate的使用)
+		- [python 发邮件联系](#python-发邮件联系)
+			- [邮件发送任务队列 `Celery`](#邮件发送任务队列-celery)
+		- [python 并发](#python-并发)
+			- [基本的程序结构](#基本的程序结构)
+			- [函数返回线程对象解释](#函数返回线程对象解释)
 	- [资源汇总](#资源汇总)
 
 <!-- /MarkdownTOC -->
@@ -21,6 +28,23 @@
 ## 问题汇总
 
 ### Flask中模板的执行机制
+
+#### Flask 上下文的概念
+
+```python
+def send_async_email(app, msg):
+    # flsk 上下文的概念
+    with app.app_context():
+        mail.send(msg)
+```
+
+#### FLask 扩展对象
+
+```python
+app = Flask(__name__)
+manager = Manager(app)
+bootstrap = Bootstrap(app)
+```
 
 #### block块的多次设置（层叠）执行机制
 
@@ -70,6 +94,24 @@ def index():
 
 ### python 发邮件联系
 [python邮件总结](https://my.oschina.net/jhao104/blog/613774)
+
+#### 邮件发送任务队列 `Celery`
+
+### python 并发
+#### 基本的程序结构
+#### 函数返回线程对象解释
+
+```python
+def send_mail( to, subject, template, **kwargs):
+    msg = Message( app.config['FLASK_MAIL_SUBJECT_PREFIX'] + subject, sender = app.config['MAIL_USERNAME'], recipients=[to] )
+    msg.body = render_template( template + '.txt', **kwargs )
+    msg.html = render_template( template + '.html', **kwargs )
+    # 创建发邮件线程
+    thr = Thread( target=send_async_email, args=[app,msg] )
+    thr.start()
+    # 为什么返回线程对象
+    return thr
+```
 
 ## 资源汇总
 

@@ -8,6 +8,7 @@
   - [Flask-Mail SMTP服务器的配置](#flask-mail-smtp服务器的配置)
   - [126邮箱的配置](#126邮箱的配置)
   - [模板渲染邮件](#模板渲染邮件)
+  - [异步发送邮件](#异步发送邮件)
 - [附录](#附录)
   - [cmd环境变量的设置](#cmd环境变量的设置)
 
@@ -126,6 +127,32 @@ def index():
 模板文件：`'$templates/mail/new_user.html`'：`User <b>{{ user.username }}</b> has joined.`
 
 > `git add. git commit -m "flask mail with template"`,`git tag 6b`
+
+#### 异步发送邮件
+> mail.send() 函数发送测试邮件时停滞了几秒钟，这个过程中浏览器无响应，为了避免不必要的延迟，将发送电子邮件的函数移到后台线程中。
+
+```python
+from threading import Thread
+# 线程的执行函数
+def send_async_email(app, msg):
+    # flsk 上下文的概念
+    with app.app_context():
+        mail.send(msg)
+
+def send_mail( to, subject, template, **kwargs):
+    msg = Message( app.config['FLASK_MAIL_SUBJECT_PREFIX'] + subject, sender = app.config['MAIL_USERNAME'], recipients=[to] )
+    msg.body = render_template( template + '.txt', **kwargs )
+    msg.html = render_template( template + '.html', **kwargs )
+    # 创建发邮件线程
+    thr = Thread( target=send_async_email, args=[app,msg] )
+    thr.start()
+    # 为什么返回线程对象
+    return thr
+```
+当程序需要发送大量的电子邮件，可以将执行 `send_asyc_email()`函数的操作发给 `Celery` 任务队列 
+> `git add. git commit -m "flask sync mail with template"`,`git tag 6c`
+
+
 
 ### 附录
 #### cmd环境变量的设置

@@ -10,6 +10,7 @@ import os
 from flask_script import Shell
 from flask_migrate import Migrate, MigrateCommand
 from flask_mail import Mail, Message
+from threading import Thread
 
 # 设置 flask 对象 manager, bootstrap, 及 moment 对象
 app = Flask(__name__)
@@ -37,13 +38,20 @@ app.config['FLASK_MAIL_SENDER'] = 'Flasky Admin <flasky@example.com>'
 # 导入邮件
 mail = Mail(app)
 
+def send_async_email(app, msg):
+    with app.app_context():
+        mail.send(msg)
+
 def send_mail( to, subject, template, **kwargs):
     msg = Message( app.config['FLASK_MAIL_SUBJECT_PREFIX'] + subject, sender = app.config['MAIL_USERNAME'], recipients=[to] )
     msg.body = render_template( template + '.txt', **kwargs )
     msg.html = render_template( template + '.html', **kwargs )
-    mail.send(msg)
+    # 创建发邮件线程
+    thr = Thread( target=send_async_email, args=[app,msg] )
+    thr.start()
+    # 为什么返回线程对象
+    return thr
 
-    pass
 ## 获取数据库对象
 db = SQLAlchemy(app)
 
